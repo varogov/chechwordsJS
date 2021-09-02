@@ -1,0 +1,45 @@
+const readline = require('readline');
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    prompt: '> ',
+});
+
+let words = [];
+let wordsCount = 0;
+
+rl.prompt();
+
+rl.on('line', (line) => {
+    if (wordsCount === 0 || wordsCount < 0) {
+        wordsCount = parseInt(line);
+    } else {
+        words.push(line)
+        if (words.length === wordsCount) {
+            validateWords(words);
+            rl.close()
+        }
+    }
+
+    rl.prompt();
+}).on('close', () => {
+    process.exit(0);
+});
+
+const validateWords = (words) => {
+    for (let word of words) {
+        let charsCount = new Map()
+        let valid = 'Yes'
+        for (let char of word) {
+            if (charsCount.has(char)) {
+                charsCount.set(char, charsCount.get(char)+1)
+            } else {
+                charsCount.set(char, 1)
+            }
+        }
+        for (let value of charsCount.values()) {
+            if (value != 2) {valid = 'No'};
+        }
+        console.log(valid)
+    }
+}
